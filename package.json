@@ -8,7 +8,7 @@
     },
     "devDependencies": {},
     "scripts": {
-        "start": "documentit ."
+        "start": "electron ."
     },
     "repository": {
         "type": "git",
