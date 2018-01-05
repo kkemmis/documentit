@@ -1,0 +1,23 @@
+{
+    "name": "documentit",
+    "version": "1.0.0",
+    "description": "tool for documenting online harassment",
+    "main": "main.js",
+    "dependencies": {
+        "electron": "^1.7.10"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "start": "documentit ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kkemmis/documentit.git"
+    },
+    "author": "Kathy Kemmis",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kkemmis/documentit/issues"
+    },
+    "homepage": "https://github.com/kkemmis/documentit#readme"
+}
