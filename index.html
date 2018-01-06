@@ -8,9 +8,17 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container window align-content-center">
         <h1>DocumentIt</h1>
-        <div id="output"></div>
+        <form>
+            <input type="text" name="casename" placeholder="Case Name"><br>
+            <input type="text" name="socialmedia" placeholder="Social Media"><br>
+            <textarea name="description" placeholder="Incident Description..." rows="10" cols="30"></textarea>
+        </form>
+
+        <label id="screenshot-path">Path:</label><br>
+        <button id="path-button" class="btn btn-warning">Select Path</button><br>
+        <button id="screen-shot" class="btn btn-primary">Take Screenshot</button>
     </div>
 </body>
 <script>
