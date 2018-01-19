@@ -1,7 +1,9 @@
 const electron = require('electron');
+const remote = electron.remote;
 const desktopCapturer = electron.desktopCapturer;
 const electronScreen = electron.screen;
 const shell = electron.shell;
+const dialog = remote.dialog;
 
 const fs = require('fs');
 const os = require('os');
@@ -16,13 +18,18 @@ var screenshotPath = '';
 var caseName = '';
 
 pathButton.addEventListener('click', function(event) {
-    dialog.showSaveDialog(function(fileName) {
-        if (fileName === undefined) {
-            return;
-        }
-        screenshotPath = fileName;
-        screenshotMsg.textContent = screenshotPath;
-    });
+    dialog.showSaveDialog({
+            filters: [
+                { name: 'png', extensions: ['png'] }
+            ]
+        },
+        function(fileName) {
+            if (fileName === undefined) {
+                return;
+            }
+            screenshotPath = fileName;
+            screenshotMsg.textContent = screenshotPath;
+        });
 });
 
 screenshot.addEventListener('click', function(event) {
