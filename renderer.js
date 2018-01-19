@@ -9,6 +9,21 @@ const path = require('path');
 
 const screenshot = document.getElementById('screen-shot');
 const screenshotMsg = document.getElementById('screenshot-path');
+const pathButton = document.getElementById('path-button');
+const casenameField = document.getElementById('casename');
+
+var screenshotPath = '';
+var caseName = '';
+
+pathButton.addEventListener('click', function(event) {
+    dialog.showSaveDialog(function(fileName) {
+        if (fileName === undefined) {
+            return;
+        }
+        screenshotPath = fileName;
+        screenshotMsg.textContent = screenshotPath;
+    });
+});
 
 screenshot.addEventListener('click', function(event) {
     screenshotMsg.textContent = 'Gathering screenshot...';
@@ -19,11 +34,16 @@ screenshot.addEventListener('click', function(event) {
         if (error) return console.log(error.message);
 
         sources.forEach(function(source) {
-            if (source.name === 'Entire Screen' || source.name === 'Screen 1') {
-                const screenshotPath = path.join(os.tmpdir(), 'screenshot.png');
+            if (source.name === 'Entire Screen' || source.name === 'Entire screen' || source.name === 'Screen 1') {
 
-                fs.writeFile(screenshotPath, source.thumbnail.toPng(), function(err) {
-                    if (err) return console.log(err.message);
+                caseName = casenameField.value;
+                if (screenshotPath === '') {
+                    timestamp = new Date().getTime();
+                    screenshotPath = path.join(os.tmpdir(), caseName + '-' + timestamp + '.png');
+                }
+
+                fs.writeFile(screenshotPath, source.thumbnail.toPng(), function(error) {
+                    if (error) return console.log(error.message);
 
                     shell.openExternal('file://' + screenshotPath);
                     var message = 'Saved screenshot to: ' + screenshotPath;
