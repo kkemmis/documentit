@@ -4,8 +4,9 @@
     "description": "tool for documenting online harassment",
     "main": "main.js",
     "dependencies": {
-        "electron": "^1.8.1",
-        "eslint": "^4.15.0"
+        "electron": "^1.8.2-beta.4",
+        "eslint": "^4.15.0",
+        "jshint": "^2.9.5"
     },
     "devDependencies": {},
     "scripts": {
