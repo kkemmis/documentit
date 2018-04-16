@@ -14,21 +14,24 @@ const screenshotMsg = document.getElementById('screenshot-path');
 const pathButton = document.getElementById('path-button');
 const casenameField = document.getElementById('casename');
 
-var screenshotPath = '';
+var directoryPath = '';
 var caseName = '';
 
 pathButton.addEventListener('click', function(event) {
-    dialog.showSaveDialog({
-            filters: [
-                { name: 'png', extensions: ['png'] }
+    dialog.showOpenDialog({
+            title: 'Choose a folder for DocumentIt to save in',
+            buttonLabel: 'Select Path',
+            properties: [
+                'openDirectory',
+                'createDirectory',
             ]
         },
-        function(fileName) {
-            if (fileName === undefined) {
+        function(paths) {
+            if (paths === undefined || paths.length === 0) {
                 return;
             }
-            screenshotPath = fileName;
-            screenshotMsg.textContent = screenshotPath;
+            directoryPath = paths[0]; // paths is an array, get the first (only) one
+            screenshotMsg.textContent = "Path: "+directoryPath;
         });
 });
 
@@ -38,28 +41,34 @@ screenshot.addEventListener('click', function(event) {
     let options = { types: ['screen'], thumbnailSize: thumbSize };
 
     desktopCapturer.getSources(options, function(error, sources) {
-        if (error) return console.log(error.message);
+        if (error) return displayError(error.message);
 
         sources.forEach(function(source) {
             if (source.name === 'Entire Screen' || source.name === 'Entire screen' || source.name === 'Screen 1') {
 
                 caseName = casenameField.value;
-                if (screenshotPath === '') {
-                    timestamp = new Date().getTime();
-                    screenshotPath = path.join(os.tmpdir(), caseName + '-' + timestamp + '.png');
+                if (directoryPath === '') {
+                    return displayError("Please Select a Path to save the screenshot to.");
                 }
 
+                timestamp = new Date().getTime();
+                screenshotPath = path.join(directoryPath, caseName + '-' + timestamp + '.png');
+
                 fs.writeFile(screenshotPath, source.thumbnail.toPng(), function(error) {
-                    if (error) return console.log(error.message);
+                    if (error) return displayError(error.message);
 
                     shell.openExternal('file://' + screenshotPath);
-                    var message = 'Saved screenshot to: ' + screenshotPath;
-                    screenshotMsg.textContent = message;
+                    screenshotMsg.textContent = 'Saved screenshot to: ' + screenshotPath;
                 })
             }
         });
     });
 });
+
+function displayError(message) {
+    screenshotMsg.textContent = "ERROR: "+message;
+    return console.log(message);
+}
 
 function determineScreenShot() {
     const screenSize = electronScreen.getPrimaryDisplay().workAreaSize;
